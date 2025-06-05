@@ -1,10 +1,41 @@
-﻿
-<MudNavMenu>
-    <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
-    <MudNavLink Href="counter" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Add">Counter</MudNavLink>
-    
-    <MudNavLink Href="weather" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.List">Weather</MudNavLink>
+﻿<MudNavMenu>  
+	<MudTreeView T="string">  
+		@foreach (var svc in Services)  
+		{  
+			<MudTreeViewItem Text="@svc">  
+				<MudDropZone T="DropItemBase"  
+                             CanDrop="@((item) => false)"
+							 Identifier="@svc"  
+							 Class="pa-2 mud-elevation-1">  
+					<ItemRenderer>  
+						<MudDynamicDropItem T="DropItemBase" Item="@context" DraggingClass="mud-primary-text mud-border-primary">  
+							<div>  
+								@context.Name  
+							</div>  
+						</MudDynamicDropItem>  
+					</ItemRenderer>	  
+				</MudDropZone>
+			</MudTreeViewItem>
+		}  
 
-</MudNavMenu>
+		<MudTreeViewItem Text="Logic">
+			<MudDropZone T="DropItemBase"
+						 CanDrop="@((item) => false)"
+						 Identifier="Logic"
+						 Class="pa-2 mud-elevation-1">
+				<ItemRenderer>
+					<MudDynamicDropItem T="DropItemBase" Item="@context" DraggingClass="mud-primary-text mud-border-primary">
+						<div>
+							@context.Name
+						</div>
+					</MudDynamicDropItem>
+				</ItemRenderer>
+			</MudDropZone>
+		</MudTreeViewItem>
+	</MudTreeView>  
+</MudNavMenu>  
 
-
+@code  
+{  
+	private string[] Services = { "ServiceA", "ServiceB", "ServiceC" };  
+}

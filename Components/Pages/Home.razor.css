@@ -1,0 +1,33 @@
+﻿/* Basic styling for the 'Collected' drop zone */
+::deep .collected-zone {
+    flex-grow: 1;
+    left: 0;
+    right: 0;
+    padding: 8px;
+    margin: 16px;
+    overflow: auto;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 24px;
+}
+
+/* Styling rules for the 'Collected' drop zone mud-dropitem-placeholder */
+::deep .collected-zone .mud-dropitem-placeholder {
+    border-radius: 24px;
+}
+
+/* Basic styling for the 'Discard' drop zone */
+::deep .discard-wrapper {
+    width: 100%;
+    height: 150px;
+    padding: 0 16px;
+    transition: height 0.3s ease-out;
+    overflow: hidden;
+}
+
+/* Styling rules for animating the 'Discard' slide-out */
+::deep .discard-wrapper.slide-out {
+    height: 0;
+    transform: translateY(200%);
+    transition: height 0.3s ease-in, transform 0.3s ease-in;
+}
