@@ -32,6 +32,7 @@
 						if (context is DropItemEndpoint endpoint)
 						{
 							<MudDynamicDropItem T="DropItemBase" Item="@context" DraggingClass="mud-primary-text mud-border-primary">
+								@context.UniqueGuid
 								<div class="d-flex align-center pa-3 ma-2 border-solid border-2 rounded-xl @(discardStyle)">
 									@endpoint.ServiceId.@endpoint.Name
 								</div>
@@ -40,21 +41,15 @@
 						else if (context is DropItemIf ifItem)
 						{
 							<MudDynamicDropItem T="DropItemBase" Item="@context" DraggingClass="mud-primary-text mud-border-primary">
-								<div class="d-flex align-center pa-3 ma-2 border-solid border-2 rounded-xl @(discardStyle)">
-									<MudDropZone T="DropItemBase"
-												 Identifier="@(context.Name + ".1")"
-												 @ondragend="() => _hoveringDiscard = false"
-												 AllowReorder="true"
-												 Class="collected-zone"
-												 Style="border-color: var(--mud-palette-text-primary)">
-												 @* Need to figure out how to deal with recursive rendering case. *@
-												 </MudDropZone>
-								</div>
+								@context.UniqueGuid
+								<NestedMudDropZone TDropItem="DropItemBase"
+												   NewIdentifier="@(logicItem.UniqueGuid.ToString())" />
 							</MudDynamicDropItem>
 						}
 						else
 						{
 							<MudDynamicDropItem T="DropItemBase" Item="@context" DraggingClass="mud-primary-text mud-border-primary">
+								@context.UniqueGuid
 								<div class="d-flex align-center pa-3 ma-2 border-solid border-2 rounded-xl @(discardStyle)">
 									@context.Name
 								</div>
