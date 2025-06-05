@@ -25,13 +25,13 @@
         }
     }
 
-    public class  DropItemIf : DropItemBase
+    public class  DropItemLogic : DropItemBase
     {
         public List<DropItemBase> Children { get; set; } = new();
 
         public override DropItemBase Clone()
         {
-            return new DropItemIf
+            return new DropItemLogic
             {
                 Name = this.Name,
                 ZoneId = this.ZoneId,

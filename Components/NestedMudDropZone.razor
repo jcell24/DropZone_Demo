@@ -1,0 +1,45 @@
+@typeparam TDropItem
+@using MudBlazor
+
+<MudDropZone T="TDropItem"
+             Identifier="@NewIdentifier"
+             AllowReorder="true"
+             Class="collected-zone"
+             Style="border-color: var(--mud-palette-text-primary)">
+    <ItemRenderer>
+        @{
+            if (context is DropItemEndpoint endpoint)
+            {
+                <MudDynamicDropItem T="DropItemBase" Item="@endpoint" DraggingClass="mud-primary-text mud-border-primary">
+                    @endpoint.UniqueGuid
+                    <div class="d-flex align-center pa-3 ma-2 border-solid border-2 rounded-xl">
+                        @endpoint.ServiceId.@endpoint.Name
+                    </div>
+                </MudDynamicDropItem>
+            }
+            else if (context is DropItemLogic logicItem)
+            {
+                <MudDynamicDropItem T="DropItemBase" Item="@logicItem" DraggingClass="mud-primary-text mud-border-primary">
+                    @logicItem.UniqueGuid
+                    <NestedMudDropZone TDropItem="TDropItem"
+                                       NewIdentifier="@(logicItem.UniqueGuid.ToString())"/>
+                </MudDynamicDropItem>
+            }
+            else if (context is DropItemBase baseItem)
+            {
+                <MudDynamicDropitem T="DropItemBase" Item="@baseItem" DraggingClass="mud-primary-text mud-border-primary">
+                    <div class="d-flex align-center pa-3 ma-2 border-solid border-2 rounded-xl">
+                        @baseItem.Name
+                    </div>
+                </MudDynamicDropitem>
+            }
+        }
+    </ItemRenderer>
+
+</MudDropZone>
+
+@code
+{
+    [Parameter]
+    public required string NewIdentifier { get; set; }
+}
