@@ -31,8 +31,8 @@
 
 						if (context is DropItemEndpoint endpoint)
 						{
+							@context.UniqueGuid
 							<MudDynamicDropItem T="DropItemBase" Item="@context" DraggingClass="mud-primary-text mud-border-primary">
-								@context.UniqueGuid
 								<div class="d-flex align-center pa-3 ma-2 border-solid border-2 rounded-xl @(discardStyle)">
 									@endpoint.ServiceId.@endpoint.Name
 								</div>
@@ -40,16 +40,16 @@
 						}
 						else if (context is DropItemIf ifItem)
 						{
+							@context.UniqueGuid
 							<MudDynamicDropItem T="DropItemBase" Item="@context" DraggingClass="mud-primary-text mud-border-primary">
-								@context.UniqueGuid
 								<NestedMudDropZone TDropItem="DropItemBase"
 												   NewIdentifier="@(logicItem.UniqueGuid.ToString())" />
 							</MudDynamicDropItem>
 						}
 						else
 						{
+							@context.UniqueGuid
 							<MudDynamicDropItem T="DropItemBase" Item="@context" DraggingClass="mud-primary-text mud-border-primary">
-								@context.UniqueGuid
 								<div class="d-flex align-center pa-3 ma-2 border-solid border-2 rounded-xl @(discardStyle)">
 									@context.Name
 								</div>

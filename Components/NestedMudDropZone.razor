@@ -1,17 +1,20 @@
 @typeparam TDropItem
+@inherits MudDropZone<DropItemBase>
 @using MudBlazor
 
 <MudDropZone T="TDropItem"
-             Identifier="@NewIdentifier"
+             Identifier="@Identifier"
              AllowReorder="true"
-             Class="collected-zone"
+             Class="@Class"
              Style="border-color: var(--mud-palette-text-primary)">
     <ItemRenderer>
         @{
+            //string discardStyle = (ReferenceEquals(context, _currentItem) && _hoveringDiscard) ? "mud-error-text mud-border-error" : "";
+
             if (context is DropItemEndpoint endpoint)
             {
+                @endpoint.UniqueGuid
                 <MudDynamicDropItem T="DropItemBase" Item="@endpoint" DraggingClass="mud-primary-text mud-border-primary">
-                    @endpoint.UniqueGuid
                     <div class="d-flex align-center pa-3 ma-2 border-solid border-2 rounded-xl">
                         @endpoint.ServiceId.@endpoint.Name
                     </div>
@@ -19,8 +22,8 @@
             }
             else if (context is DropItemLogic logicItem)
             {
+                @logicItem.UniqueGuid
                 <MudDynamicDropItem T="DropItemBase" Item="@logicItem" DraggingClass="mud-primary-text mud-border-primary">
-                    @logicItem.UniqueGuid
                     <NestedMudDropZone TDropItem="TDropItem"
                                        NewIdentifier="@(logicItem.UniqueGuid.ToString())"/>
                 </MudDynamicDropItem>
@@ -37,9 +40,3 @@
     </ItemRenderer>
 
 </MudDropZone>
-
-@code
-{
-    [Parameter]
-    public required string NewIdentifier { get; set; }
-}

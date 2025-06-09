@@ -3,6 +3,7 @@
     public abstract class DropItemBase
     {
         public Guid UniqueGuid { get; set; } = Guid.NewGuid();
+        public DropItemLogic? Parent { get; set; } = null;
         public required string Name { get; set; }
         public required string ZoneId { get; set; }
         public bool CanDiscard { get; set; } = false;
