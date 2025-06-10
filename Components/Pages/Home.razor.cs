@@ -59,7 +59,7 @@ public partial class Home
         string toZone = info.DropzoneIdentifier;
 
         // Only show discard option if the item is being moved from the "Collected" zone.
-        if (fromZone == "Collected") _showDiscard = false;
+        _showDiscard = false;
 
         // Discard item
         if (info.DropzoneIdentifier == "Discard" && info.Item.CanDiscard)
@@ -106,7 +106,7 @@ public partial class Home
         {
             if (toZone == "Collected")
             {
-                DropItemLogic? parent = info.Item.parent;
+                DropItemLogic? parent = info.Item.Parent;
                 while (parent != null)
                 {
                     parent.Children.Remove(info.Item);

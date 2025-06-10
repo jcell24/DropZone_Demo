@@ -6,16 +6,17 @@
              Identifier="@Identifier"
              AllowReorder="true"
              Class="@Class"
-             Style="border-color: var(--mud-palette-text-primary)">
+             Style="border-color: var(--mud-palette-text-primary)"
+             @ondragend="async () => await HoveringDiscardChanged.InvokeAsync(false)">
     <ItemRenderer>
         @{
-            //string discardStyle = (ReferenceEquals(context, _currentItem) && _hoveringDiscard) ? "mud-error-text mud-border-error" : "";
+            string discardStyle = (ReferenceEquals(context, CurrentItem) && HoveringDiscard) ? "mud-error-text mud-border-error" : "";
 
             if (context is DropItemEndpoint endpoint)
             {
                 @endpoint.UniqueGuid
                 <MudDynamicDropItem T="DropItemBase" Item="@endpoint" DraggingClass="mud-primary-text mud-border-primary">
-                    <div class="d-flex align-center pa-3 ma-2 border-solid border-2 rounded-xl">
+                    <div class="d-flex align-center pa-3 ma-2 border-solid border-2 rounded-xl @(discardStyle)">
                         @endpoint.ServiceId.@endpoint.Name
                     </div>
                 </MudDynamicDropItem>
@@ -25,18 +26,36 @@
                 @logicItem.UniqueGuid
                 <MudDynamicDropItem T="DropItemBase" Item="@logicItem" DraggingClass="mud-primary-text mud-border-primary">
                     <NestedMudDropZone TDropItem="TDropItem"
-                                       NewIdentifier="@(logicItem.UniqueGuid.ToString())"/>
+                                       Identifier="@(logicItem.UniqueGuid.ToString())"
+                                       Class="@($"collected-zone {discardStyle}")"  />
                 </MudDynamicDropItem>
             }
             else if (context is DropItemBase baseItem)
             {
-                <MudDynamicDropitem T="DropItemBase" Item="@baseItem" DraggingClass="mud-primary-text mud-border-primary">
+                <MudDynamicDropItem T="DropItemBase" Item="@baseItem" DraggingClass="mud-primary-text mud-border-primary">
                     <div class="d-flex align-center pa-3 ma-2 border-solid border-2 rounded-xl">
                         @baseItem.Name
                     </div>
-                </MudDynamicDropitem>
+                </MudDynamicDropItem>
             }
         }
     </ItemRenderer>
 
 </MudDropZone>
+
+@code {
+    [Parameter]
+    public bool ShowDiscard { get; set; }
+    [Parameter]
+    public EventCallback<bool> ShowDiscardChanged { get; set; }
+
+    [Parameter]
+    public bool HoveringDiscard { get; set; }
+    [Parameter]
+    public EventCallback<bool> HoveringDiscardChanged { get; set; }
+
+    [Parameter]
+    public DropItemBase? CurrentItem { get; set; }
+    [Parameter]
+    public EventCallback<DropItemBase?> CurrentItemChanged { get; set; }
+}
