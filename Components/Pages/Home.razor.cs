@@ -124,52 +124,37 @@ public partial class Home
                     // Check item type
                     if (info.Item is DropItemLogic logicItem)
                     {
-                        // Check if 'toZone' is a child of item
-                        if (logicItem.UniqueGuid.ToString() != toZone && logicItem.Children.All(d => d.UniqueGuid.ToString() != toZone))
+                        // Enhanced cycle detection - check if nextParent is anywhere in the hierarchy of logicItem
+                        bool wouldCreateCycle = false;
+                        var currentAncestor = logicItem;
+                        var descendantGuids = GetAllDescendants(logicItem).Select(d => d.UniqueGuid).ToHashSet();
+
+                        if (descendantGuids.Contains(nextParent.UniqueGuid))
                         {
+                            wouldCreateCycle = true;
+                        }
+
+                        if (!wouldCreateCycle && logicItem.UniqueGuid != nextParent.UniqueGuid)
+                        {
+                            // Remove from old parent first
+                            logicItem.Parent?.Children.Remove(logicItem);
+
                             logicItem.ZoneId = toZone;
                             logicItem.Parent = nextParent;
-                            nextParent.Children.Add(info.Item);
-
-                            // Add grand-children
-                            foreach (DropItemBase child in logicItem.Children)
-                            {
-                                nextParent.Children.Add(child);
-                            }
+                            nextParent.Children.Add(logicItem);
                         }
                     }
                     // Handle all other item types
                     else
                     {
+                        // Remove from old parent first
+                        info.Item.Parent?.Children.Remove(info.Item);
+
+                        // Add to new parent
                         info.Item.ZoneId = toZone;
+                        info.Item.Parent = nextParent;
                         nextParent.Children.Add(info.Item);
                     }
-                }
-
-                // Update ex-parent
-                if (_items.FirstOrDefault(item => item.UniqueGuid.ToString() == fromZone) is DropItemLogic prevParent)
-                {
-                    List<Guid> guidsToRemove = [_currentItem.UniqueGuid];
-
-                    void CollectGuids(DropItemLogic item)
-                    {
-                        foreach (DropItemBase child in item.Children)
-                        {
-                            guidsToRemove.Add(child.UniqueGuid);
-
-                            if (child is DropItemLogic logicItem)
-                            {
-                                CollectGuids(logicItem);
-                            }
-                        }
-                    }
-
-                    if (info.Item is DropItemLogic logicItem)
-                    {
-                        CollectGuids(logicItem);
-                    }
-
-                    prevParent.Children = [.. prevParent.Children.Where(child => !guidsToRemove.Contains(child.UniqueGuid))];
                 }
             }
         }
